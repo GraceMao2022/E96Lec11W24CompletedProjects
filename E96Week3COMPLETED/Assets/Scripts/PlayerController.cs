@@ -6,8 +6,9 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     // Component references
-    Rigidbody2D rb;  // Unity's physics component
+    Rigidbody2D rb;  // Unity's 2D physics component
 
+    //variables for speed and jump height
     [SerializeField] float speed = 5f;
     [SerializeField] float jumpHeight = 5f;
 
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     //keep track of if the player is on the ground
     bool isGrounded = false;
+    //keep track if player is facing right
     bool isFacingRight = true;
 
     // Start is called before the first frame update
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         Move(direction);
 
+        //flip player if it's moving in a direction that it isn't currently facing
         if ((isFacingRight && direction == -1) || (!isFacingRight && direction == 1))
             Flip();
     }
@@ -49,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     void OnMove(InputValue moveVal)
     {
-        //store input as a 2D vector
+        //store input as a float (-1 --- left, 0 --- stopped, 1 --- right)
         float movDirection = moveVal.Get<float>();
         direction = movDirection;
     }
@@ -81,7 +84,8 @@ public class PlayerController : MonoBehaviour
     //     isGrounded = false;
     // }
 
-
+    //flip local scale of player so that the sprite image and colliders flip -- make sure pivot point
+    //of sprite has x value of 0.5 (center) so that it only flips along middle vertical axis 
     private void Flip()
     {
         isFacingRight = !isFacingRight;
