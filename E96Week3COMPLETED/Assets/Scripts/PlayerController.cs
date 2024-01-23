@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     // Component references
     Rigidbody2D rb;  // Unity's 2D physics component
+    Animator anim;  // Unity's tool for handling animations
 
     //variables for speed and jump height
     [SerializeField] float speed = 5f;
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     {
         // Get references to the components attached to the current GameObject
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -40,8 +42,8 @@ public class PlayerController : MonoBehaviour
     void OnJump()
     {
         //if player is on the ground, jump
-        //if (isGrounded)
-        Jump();
+        if (isGrounded)
+            Jump();
     }
 
     private void Jump()
@@ -61,6 +63,24 @@ public class PlayerController : MonoBehaviour
     {
         // Set the x component of velocity while keeping the y velocity what it originally is.
         rb.velocity = new Vector2(x * speed, rb.velocity.y);
+
+        // Set an animator parameter to handle animation transitions
+        anim.SetBool("isRunning", x != 0);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        // check if angle between normal vector of object of contact and up vector is less than 45 degrees
+        // AKA if-statement is true if player is touching another object that is 0 to 45 degrees slope
+        if (Vector2.Angle(collision.GetContact(0).normal, Vector2.up) < 45f)
+            isGrounded = true;
+        else
+            isGrounded = false;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        isGrounded = false;
     }
 
     //commonly used function but not used in this case
