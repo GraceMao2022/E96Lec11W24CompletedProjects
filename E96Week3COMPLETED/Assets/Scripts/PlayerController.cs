@@ -70,12 +70,33 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+
+        List<GameObject> currentCollisions = new List<GameObject>();
+        currentCollisions.Add(collision.gameObject);
+        Debug.Log(currentCollisions);
+        isGrounded = false;
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            if (Vector2.Angle(collision.GetContact(i).normal, Vector2.up) < 45f)
+            {
+                Debug.Log(Vector2.Angle(collision.GetContact(i).normal, Vector2.up));
+                isGrounded = true;
+                return;
+            }
+        }
+
+
         // check if angle between normal vector of object of contact and up vector is less than 45 degrees
         // AKA if-statement is true if player is touching another object that is 0 to 45 degrees slope
-        if (Vector2.Angle(collision.GetContact(0).normal, Vector2.up) < 45f)
-            isGrounded = true;
-        else
-            isGrounded = false;
+        // if (collision.gameObject.tag == "Ground")
+        // {
+        //     if (Vector2.Angle(collision.GetContact(0).normal, Vector2.up) < 45f)
+        //         isGrounded = true;
+        // }
+        // if (Vector2.Angle(collision.GetContact(0).normal, Vector2.up) < 45f)
+        //     isGrounded = true;
+        // else
+        //     isGrounded = false;
     }
 
     private void OnCollisionExit2D(Collision2D collision)
