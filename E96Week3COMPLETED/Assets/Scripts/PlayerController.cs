@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     float direction = 0;
 
     //keep track of if the player is on the ground
-    bool isGrounded = false;
+    public bool isGrounded = false;
     //keep track if player is facing right
     bool isFacingRight = true;
 
